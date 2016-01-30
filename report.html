@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <title>Random Forest implementation in Python from Scratch</title>
+    </head>
+    <body style="margin: auto; width: 60%; text-align: justify; padding: 50px 0">
+        <h2>Random Forest Implementation in Python from Scratch</h2>
+        <p>In this report, I will try to explain my implementation of the random Forest program with bagging, ensemble idea and random feature selection technique used for building the Random Forest classifier.</p><br/>
+        <p>P.S. Though, I have provided detailed comments in the program for each and every section and the logic. Here, in this report, I will focus on explaining implementation further and more importantly the flow of the program. The report is divided into 3 parts</p>
+        <ul>
+            <li>Implementation Explanation</li>
+            <li>Flow Explanation</li>
+            <li>Classification Result</li>
+        </ul>
+        
+        <h4>1. Implementation Explanation:</h4>
+        <p>For the report and for the sake of simplicity, I have divided the program into 3 classes.</p>
+        <p><b> --> DecisionTree Class: </b>As the name suggest, This class consist all the functions and variable needed by decision tree to build a model. This class is a standalone class and can be used as a decision tree classifier separately also. Below are the main functions of the decision tree classifier.</p>
+        <div style="margin-left: 50px;margin-bottom: 25px">
+            <p><b>def classEntropy(self, data): </b>This function is used to determine the entropy of the complete dataset provided. Which helps in finding Information Gain.</p>
+            <p><b>def getInfoGainForSingleAttribute(self, data, attributeIndex): </b>Function to calculate the information for a particular attribute, this function use class entropy function also. The input for this function is index of the particular attribute for which we want to find the information gain.</p>
+            <p><b>def getHighestInfoGainForAttributesRange(self, data, attributesRange): </b>Function to get the index of the attribute with highest information gain. Input for this function is the data and the attributes range.</p>
+            <p><b>def buildDecisionTreeModel(self, data, attributesRange=None): </b>Function to build decision tree classifier based on the training data provided. In this function we're always getting the random bootstrap sample data with replacement.</p>
+            <p><b>def classifyInstance(self, model, instance, defaultTargetClass=None): </b>Function to classify the instance based on the model provided. The function start traversing the trained model from top node based on the attribute index value at each node and traverse until it gets pure node. The value of the pure node is then returned.</p>
+        </div>
+        <p><b> --> RandomForest Class: </b>Class of Random Forest Classifier used to built the complete random forest classifier with Bagging and random feature selection.</p>
+        <div style="margin-left: 50px;margin-bottom: 25px">
+            <p><b>def getRandomBootstrapSamplesWithReplacement(self, sampleSize): </b>This function takes the random bootstrap data from the training samples provided with replacement.</p>
+            <p><b>def getSimpleMajorityVoting(self, instance, defaultLabel): </b>This function facilitate to find the predicted class label based on majority voting. It takes account the predicted class label of each and every model's predicted class and then find the final result based on majority voting.</p>
+            <p><b>def buildRandomForest(self): </b>Function to build the random forest classifier model. It takes number of decision trees to build and pass random sample data for each decision tree model to to built. This function calls functions from DecisionTree class for decision tree model and saves the trained model as well as the objects of the Decision Tree class</p>
+            <p><b>def classifyTestData(self, testInstances): </b>Function to classify the test data, finding the accuracy and building the confusion model based on the predicted value of the test data instances.</p>
+        </div>
+        <p><b> --> RandomForestClassifier Class: </b>The main reason to make this class is just to encapsulate all the program in one, so that the complete program look as a Random Forest classifier.</p>
+        <div style="margin-left: 50px;margin-bottom: 25px">
+            <p><b>def createTrainingAndTestSamplesFromData(self): </b>This function separates the file data into training data; test data; header and saves it into the variables declared above to use in the program.</p>
+            <p><b>def performClassification(self): </b>This function create RandomForest class object and calls the function to classify the test data provided</p>
+        </div>
+        <p>Above 3 classes and its functions consist of the complete random forest classifier with all the requirement of the report as</p>
+        <ul style="margin-bottom: 50px">
+            <li>Pluggable Decision Tree classifier building</li>
+            <li>Random bootstrap sample data with replacement for each DT model built</li>
+            <li>Random feature selection at every level of tree during training the DT classifier.</li>
+            <li>implementation of ensemble combination based on majority voting. </li>
+        </ul>
+        <h4>2. Flow Explanation:</h4>
+        <p>--> The Flow: of the program start from creating an object of the RandomForestClassifier class. The object then used to create training and test samples in a % split of 75% and 25% from the data provided.</p>
+        <p>--> The next step of the program is to build object of RandomForest class, from within performClassification function of RandomForestClassifier. The RandomForest class is responsible for creating a number of Decision Tree Model and the objects of DecisionTree class.</p>
+        <p style="margin-bottom: 50px">--> Once we have complete trained model of Random Forest classifier with us, we now try to classify the test data using RandomForest Object’s classifyTestData function. The classifyTestData function predict the test instances class label with Majority Voting. This function also calculate the accuracy and confusion matrix for each test data.</p>
+        <h4>3. Classification Result:</h4>
+        <p>Below is the summarized results produced from the program for all 3 datasets are:</p>
+        <div style="margin-left:100px">
+            <span>++++++++Classification Results for Tennis Data++++++++</span><br>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<--&nbsp;Predicted as</span><br>
+            <span>yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0</span><br>
+            <span>no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0</span><br>
+            <span>Accuracy&nbsp;::&nbsp;&nbsp;75.0&nbsp;%</span><br>
+            <span>+++++++++++++++++++++++++++++++++++++++</span><br><br><br><br>
+            
+            <span>++++++++Classification Results for Banks Data++++++++</span><br>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<--&nbsp;Predicted as</span><br>
+            <span>yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;24</span><br>
+            <span>no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;35</span><br>
+            <span>Accuracy&nbsp;::&nbsp;&nbsp;76.67&nbsp;%</span><br>
+            <span>+++++++++++++++++++++++++++++++++++++++</span><br><br><br><br>
+            
+            <span>++++++++Classification Results for Politics Data++++++++</span><br>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<--&nbsp;Predicted as</span><br>
+            <span>yes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;66&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2</span><br>
+            <span>no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;41</span><br>
+            <span>Accuracy&nbsp;::&nbsp;&nbsp;95.16&nbsp;%</span><br>
+            <span>+++++++++++++++++++++++++++++++++++++++</span><br><br><br><br>
+        </div>
+        <p>I have compared the results with Weka also, I got almost same results which I have. Though the results were sometimes a bit high and sometimes a bit low, due to randomization in feature selection and subspace sampling in our program. But altogether, the results and accuracy were more or less the same.</p>
+        <p>I have tried to print the confusion matrix from the program. Though it provide good output, but in some places the indentation of confusion matrix is not as appropriate as it should be.</p>
+        <p>I hope the report, comments in the program and README file is quite useful in explaining all the logic of the program. Yet, in case there is any query, please mail me.</p><br><br>
+        Thanks<br>
+        Deepak Khatri 
+    </body>
+</html>
+
